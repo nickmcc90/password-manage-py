@@ -1,1 +1,27 @@
 first init
+
+Don't actually make a program with real passwords!
+This is just a fun project.
+
+If the user types in the correct password, we will encrypt the other passwords.
+Let's dive in.
+
+1. Ask user for the password.
+2. Then ask if they want to add or view passwords in the database.
+The options that follow will be in a while True loop.
+3. Make a function for each of the view and add paths.
+4. This is so that we can have the logic in a function, and not all
+nested in a loop.
+5. For the add function:
+    - ask for name and password
+    - open up passwords.txt and put the info in
+    ** use "with" because the file will automatically close.
+
+    with open('passwords.txt', 'a') as f:
+
+    The second argument is the mode in which we interact with the file.
+        - 'w' - write. Override a file if it exists, or create a new one. Only use if you want to override.
+        - 'r' - read. All you can do is read. Can't alter it.
+        - 'a' - append. Adds something to the end of existing file, or create a new one if it doesn't exist.
+
+timestamp: 1:15:29
