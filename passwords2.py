@@ -1,22 +1,35 @@
 from cryptography.fernet import Fernet
+import base64
+import os
+from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
-# Generate a unique encryption key
-'''def write_key():
-    key = Fernet.generate_key()
-    with open("key.key", "wb") as key_file:
-        key_file.write(key)
-write_key()
-'''
+# def write_salt():
+#     salt = os.urandom(16)
+#     with open("salt.key", "wb") as key_file:
+#         key_file.write(salt)
+# write_salt()
 
-def load_key():
-    file = open('key.key', 'rb')
+def load_salt():
+    file = open('salt.key', 'rb')
     key = file.read()
     file.close()
     return key
 
+
 master_pwd = input("What is the master password? ")
 
-key = load_key() + master_pwd.encode()
+salt = load_salt()
+
+# new additional code.
+kdf = PBKDF2HMAC(
+    algorithm=hashes.SHA256(),
+    length=32,
+    salt=salt,
+    iterations=480000,
+)
+key = base64.urlsafe_b64encode(kdf.derive(master_pwd.encode()))
 fer = Fernet(key)
 
 

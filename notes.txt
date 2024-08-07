@@ -64,3 +64,90 @@ want people opening it up.
 - from cryptography.fernet import Fernet
 
 // timestamp: 1:25:31
+
+It's okay that the import is underlined in yellow.
+
+The master password that we input + the key from the
+imported cryptography will help us decrypt the text.
+
+We need a function to create a key, and one to retrieve a key.
+
+10. Make a function to spawn a key. Then comment it out.
+Like this:
+
+def write_key():
+    key = Fernet.generate_key()
+    with open("key.key", "wb") as key_file:
+        key_file.write(key)
+
+write_key()
+
+The wb means 'write bits'
+
+Then the key spawns, and we can comment this out with ''' '''
+
+11. Make a function that loads this key. Like this:
+
+def load_key():
+    file = open('key.key', 'rb')
+    key = file.read()
+    file.close()
+    return key
+
+We put this function above the master_pwd input.
+
+12. Then below the master_pwd input, we combine the key and password
+and store it in Fernet.
+
+master_pwd = input("What is the master password? ")
+
+key = load_key() + master_pwd.encode() 
+fer = Fernet(key)
+
+13. Now we need to go to our add function and encrypt the password
+so that it doesn't show the real deal inside the file.
+
+Go to the add function and change this line to this:
+
+        f.write(name + "|" + str(fer.encrypt(pwd.encode())) + "\n")
+
+14. We need to decrypt them when we do the view function.
+
+            print("User:", user, "| Password:", str(fer.decrypt(passw.encode())))
+
+15. We should be storing encrypted, and reading decrpyted!
+Remember to remove any passwords from passwords.txt.
+
+16. Run the program, and choose a random password.
+
+17. The viewing of the passwords doesn't work because we were writing byte strings.
+Those are these:
+b'hello'
+It's different from this:
+'hello'
+
+What we need to do for step 13 and 14 instead is take away the str() stuff and
+put a .decode() after everything in step 13. I'll show step 13:
+
+        f.write(name + "|" + fer.encrypt(pwd.encode()).decode() + "\n")
+
+18. This should work, but the view function returns the password as a byte now.
+We type .decode() after the view thing like this:
+
+            print("User:", user, "| Password:", fer.decrypt(passw.encode()).decode())
+
+Should work now.
+
+19. This above way doesn't work with master passwords.
+
+20. Here's the code (in passwords2.py) to make everything work.
+
+We imported a few things, initially created a variable named
+salt and read it into the file. Just like we did for key.key
+in step 10. Then, we did a few things under master password
+to make the master_pwd work.
+
+This new code works, but if we log in with a different password,
+and we add more passwords to the main list, we will always
+get an error when viewing the list no matter what master_pwd we
+use because the passwords in that list have different keys.
