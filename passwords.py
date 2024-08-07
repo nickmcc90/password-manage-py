@@ -1,7 +1,18 @@
-master_pwd = input("What is the master password? ")
+from cryptography.fernet import Fernet
 
+# Generate a unique encryption key
+key = Fernet.generate_key()
+
+master_pwd = input("What is the master password? ")
+print(key)
+
+# reads each password from the files.s
 def view():
-    pass
+    with open('passwords.txt', 'r') as f:
+        for line in f.readlines():
+            data = line.rstrip()
+            user, passw = data.split("|")
+            print("User:", user, "| Password:", passw)
 
 # creates a new file to add a password into. Also grab user account to store.
 def add():
@@ -9,7 +20,7 @@ def add():
     pwd = input("Password: ")
 
     with open('passwords.txt', 'a') as f:
-        pass
+        f.write(name + "|" + pwd + "\n")
 
 while True:
     mode = input("Would you like to add a new password or view existing ones (view or add)? ")

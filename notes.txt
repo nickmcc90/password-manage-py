@@ -18,6 +18,7 @@ nested in a loop.
     ** use "with" because the file will automatically close.
 
     with open('passwords.txt', 'a') as f:
+        f.write(name + "|" + pwd)
 
     The second argument is the mode in which we interact with the file.
         - 'w' - write. Override a file if it exists, or create a new one. Only use if you want to override.
@@ -25,3 +26,41 @@ nested in a loop.
         - 'a' - append. Adds something to the end of existing file, or create a new one if it doesn't exist.
 
 timestamp: 1:15:29
+
+This full add function creates a new page for everything to insert on.
+
+Make sure to add a \n to the code.
+
+        f.write(name + "|" + pwd + "\n")
+
+6. For the view function:
+    - use the 'r' capability with the f.write.
+    - use a for loop to get all the lines of the file.
+
+        with open('passwords.txt', 'r') as f:
+        for line in f.readlines():
+            print(line.rstrip())
+    - at the end, you need to have the .rstrip to get rid of the
+    new line "\n" that spawns at the end.
+
+7. Now, we should separate the username from the password in the passwords.txt
+file, to get specific things.
+    - we should change the previous code within the for loop in the view function
+    to this:
+
+    for line in f.readlines():
+        data = line.rstrip()
+        user, passw = data.split("|")
+
+    - for each pair, it can be split up into user, and passw.
+
+8. Add some styling to the print statement, like this:
+    print("User:", user, "| Password:", passw)
+
+9. The next step is to encrpyt the passwords file, because we don't
+want people opening it up.
+- We can import a module.
+- Type pip install cryptography
+- from cryptography.fernet import Fernet
+
+// timestamp: 1:25:31
